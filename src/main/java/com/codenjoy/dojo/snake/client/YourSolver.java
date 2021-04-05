@@ -45,16 +45,14 @@ public class YourSolver implements Solver<Board> {
         Point head = board.getHead();
         List<Point> snake = board.getSnake();
         List<Point> stones = board.getStones();
-        System.out.println("Stone X " + stones.get(0).getX());
-        System.out.println("Stone Y " + stones.get(0).getY());
-
+        int[][] sdf = getSnakeObs(snake, stones);
         List<Point> apples = board.getApples();
         List<Point> walls = board.getWalls();
         Direction snakeDirection = board.getSnakeDirection();
 
         AStar aStar = new AStar(14, 14, head.getX(), head.getY(), apples.get(0).getX(), apples.get(0).getY(),
-                new int [][]{{0, 1}, {1,1}}
-                );
+                sdf
+        );
 
         aStar.display();
         aStar.process(); //apply A* Algorithm
@@ -77,21 +75,29 @@ public class YourSolver implements Solver<Board> {
         return "Hello world";
     }
 
-//    public Point[][] getSnakeObs(List<Point> snake,List<Point> stones){
-//        //add snake size to obs
-//        List<Point> obstacles = new ArrayList<>(snake);
-//        obstacles.add(stones.get(0));
-//
-//        Point [] ob = new Point[snake.size()];
-//        for(int i = 0; i <= snake.size()-1; i++ ){
-//            snakeArr[i] = snake.get(i);
-//        }
-//        //add stone as a obs
-//
-//        System.out.println("!!!!!" + Arrays.toString(snakeArr));
-//
-//        return snakeArr;
-//    }
+    public int[][] getSnakeObs(List<Point> snake, List<Point> stones) {
+        //add snake size to obs
+        snake.remove(0);
+        List<Point> obstacles = new ArrayList<>(snake);
+        obstacles.add(stones.get(0));
+        System.out.println("ObstaclesList " + obstacles);
+
+
+//        int[][] ob = obstacles.Select(a -> a.ToArray()).ToArray();
+        int[][] ob = new int[obstacles.size()][2];
+
+            for (int i = 0; i < obstacles.size(); i++) {
+                ob[i][0] = obstacles.get(i).getX();
+                ob[i][1] = obstacles.get(i).getY();
+        }
+
+
+        //add stone as a obs
+
+        System.out.println("!!!!!" + Arrays.deepToString(ob));
+
+        return ob;
+    }
 
     public static void main(String[] args) {
         WebSocketRunner.runClient(
