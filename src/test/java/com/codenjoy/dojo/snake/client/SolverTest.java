@@ -36,13 +36,12 @@ import static org.mockito.Mockito.when;
 
 public class SolverTest {
 
-    private Dice dice;
+
     private Solver ai;
 
     @Before
     public void setup() {
-        dice = mock(Dice.class);
-        ai = new YourSolver(dice);
+        ai = new YourSolver();
     }
 
     private Board board(String board) {
@@ -82,7 +81,5 @@ public class SolverTest {
         assertEquals(expected.toString(), actual);
     }
 
-    private void dice(Direction direction) {
-        when(dice.next(anyInt())).thenReturn(direction.value());
-    }
+
 }
