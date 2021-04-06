@@ -45,12 +45,12 @@ public class YourSolver implements Solver<Board> {
         Point head = board.getHead();
         List<Point> snake = board.getSnake();
         List<Point> stones = board.getStones();
-        int[][] sdf = getSnakeObs(snake, stones);
-        List<Point> apples = board.getApples();
         List<Point> walls = board.getWalls();
+        int[][] sdf = getSnakeObs(snake, stones, walls);
+        List<Point> apples = board.getApples();
         Direction snakeDirection = board.getSnakeDirection();
 
-        AStar aStar = new AStar(14, 14, head.getX(), head.getY(), apples.get(0).getX(), apples.get(0).getY(),
+        AStar aStar = new AStar(15, 15, head.getX(), head.getY(), apples.get(0).getX(), apples.get(0).getY(),
                 sdf
         );
 
@@ -60,9 +60,7 @@ public class YourSolver implements Solver<Board> {
         aStar.displaySolution(); //display solution path;
 
         ArrayList<Cell> pathArr = new ArrayList<>(aStar.path);
-        System.out.println("Before" + pathArr);
         Collections.reverse(pathArr);
-        System.out.println("After" + pathArr);
 
         if (pathArr.size() > 1 && head.getX() < pathArr.get(1).x) return Direction.RIGHT.toString();
         else if (pathArr.size() == 1 && head.getX() < apples.get(0).getX()) return Direction.RIGHT.toString();
@@ -75,27 +73,17 @@ public class YourSolver implements Solver<Board> {
         return "Hello world";
     }
 
-    public int[][] getSnakeObs(List<Point> snake, List<Point> stones) {
-        //add snake size to obs
+    public int[][] getSnakeObs(List<Point> snake, List<Point> stones, List<Point> walls) {
         snake.remove(0);
         List<Point> obstacles = new ArrayList<>(snake);
         obstacles.add(stones.get(0));
-        System.out.println("ObstaclesList " + obstacles);
-
-
-//        int[][] ob = obstacles.Select(a -> a.ToArray()).ToArray();
+        obstacles.addAll(walls);
         int[][] ob = new int[obstacles.size()][2];
-
-            for (int i = 0; i < obstacles.size(); i++) {
-                ob[i][0] = obstacles.get(i).getX();
-                ob[i][1] = obstacles.get(i).getY();
+        for (int i = 0; i < obstacles.size(); i++) {
+            ob[i][0] = obstacles.get(i).getX();
+            ob[i][1] = obstacles.get(i).getY();
         }
-
-
-        //add stone as a obs
-
-        System.out.println("!!!!!" + Arrays.deepToString(ob));
-
+        System.out.println("!!!! " + Arrays.deepToString(ob));
         return ob;
     }
 
