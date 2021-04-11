@@ -4,7 +4,7 @@ import java.util.*;
 
 public class AStar {
 
-    //costs for diagonal, vertical and horizontal moves
+    //costs for vertical and horizontal moves
     public static final int V_H_COST = 10;
     //cells of out grid
     private Cell[][] grid;
@@ -22,7 +22,7 @@ public class AStar {
     public List<Cell> path = new ArrayList<>();
 
 
-    public AStar(int width, int height, int sX, int sY, int eX, int eY, int[][] blocks) {
+    public AStar(int width, int height, int sX, int sY, int eX, int eY, int[][] obstacles) {
         grid = new Cell[width][height];
         closedCells = new boolean[width][height];
         openCells = new PriorityQueue<Cell>((Cell c1, Cell c2) -> {
@@ -41,13 +41,13 @@ public class AStar {
         }
         grid[startX][startY].finalCost = 0;
 
-        //we put the blocks on the grid
-        for (int i = 0; i < blocks.length; i++) {
-            addBlockOnCell(blocks[i][0], blocks[i][1]);
+        //we put the obstacles on the grid
+        for (int i = 0; i < obstacles.length; i++) {
+            addObstaclesOnCell(obstacles[i][0], obstacles[i][1]);
         }
     }
 
-    public void addBlockOnCell(int x, int y) {
+    public void addObstaclesOnCell(int x, int y) {
         grid[x][y] = null;
     }
 
@@ -124,7 +124,7 @@ public class AStar {
                 else if (grid[i][j] != null)
                     System.out.printf("%-3d ", 0);
                 else
-                    System.out.print("%  "); //block cell
+                    System.out.print("OB  "); //block cell
             }
             System.out.println();
         }
@@ -139,7 +139,7 @@ public class AStar {
                 if (grid[i][j] != null)
                     System.out.printf("%-3d ", grid[i][j].finalCost);
                 else
-                    System.out.print("BL ");
+                    System.out.print("OB ");
             }
             System.out.println();
         }
@@ -171,7 +171,7 @@ public class AStar {
                     else if (grid[i][j] != null)
                         System.out.printf("%-3s ", grid[i][j].solution ? "X" : "0");
                     else
-                        System.out.print("BL  "); //block cell
+                        System.out.print("OB  "); //block cell
                 }
                 System.out.println();
             }

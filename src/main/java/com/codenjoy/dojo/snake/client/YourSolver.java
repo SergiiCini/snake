@@ -47,7 +47,6 @@ public class YourSolver implements Solver<Board> {
         List<Point> stones = board.getStones();
         List<Point> walls = board.getWalls();
         List<Point> apples = board.getApples();
-        Direction snakeDirection = board.getSnakeDirection();
         AStar aStar;
 
         if (snake.size() < 25) {
@@ -79,7 +78,7 @@ public class YourSolver implements Solver<Board> {
         else if (pathArr.size() == 1 && head.getY() > apples.get(0).getY()) return Direction.DOWN.toString();
         if (pathArr.size() > 1 && head.getY() < pathArr.get(1).y) return Direction.UP.toString();
         else if (pathArr.size() == 1 && head.getY() < apples.get(0).getY()) return Direction.UP.toString();
-        return "Hello world";
+        return Direction.RIGHT.toString();
     }
 
     public int[][] getSnakeObs(List<Point> snake, List<Point> stones, List<Point> walls) {
