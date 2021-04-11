@@ -29,6 +29,7 @@ import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.snake.moving.algorithm.AStar;
 import com.codenjoy.dojo.snake.moving.algorithm.Cell;
+import org.json.JSONPropertyName;
 
 import java.util.*;
 
@@ -46,13 +47,22 @@ public class YourSolver implements Solver<Board> {
         List<Point> snake = board.getSnake();
         List<Point> stones = board.getStones();
         List<Point> walls = board.getWalls();
-        int[][] sdf = getSnakeObs(snake, stones, walls);
         List<Point> apples = board.getApples();
         Direction snakeDirection = board.getSnakeDirection();
+        AStar aStar;
 
-        AStar aStar = new AStar(15, 15, head.getX(), head.getY(), apples.get(0).getX(), apples.get(0).getY(),
-                sdf
-        );
+        if (snake.size() < 25) {
+            int[][] sdf = getSnakeObs(snake, stones, walls);
+            aStar = new AStar(15, 15, head.getX(), head.getY(), apples.get(0).getX(), apples.get(0).getY(),
+                    sdf);
+        } else {
+            int[][] sdf = getSnakeObs(snake, apples, walls);
+            apples.remove(0);
+            apples.add(stones.get(0));
+            aStar = new AStar(15, 15, head.getX(), head.getY(), stones.get(0).getX(), stones.get(0).getY(),
+                    sdf
+            );
+        }
 
         aStar.display();
         aStar.process(); //apply A* Algorithm
@@ -83,7 +93,6 @@ public class YourSolver implements Solver<Board> {
             ob[i][0] = obstacles.get(i).getX();
             ob[i][1] = obstacles.get(i).getY();
         }
-        System.out.println("!!!! " + Arrays.deepToString(ob));
         return ob;
     }
 
