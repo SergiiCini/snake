@@ -29,7 +29,6 @@ import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.snake.moving.algorithm.AStar;
 import com.codenjoy.dojo.snake.moving.algorithm.Cell;
-import org.json.JSONPropertyName;
 
 import java.util.*;
 

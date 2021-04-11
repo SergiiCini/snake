@@ -64,6 +64,11 @@
             <artifactId>scala-library</artifactId>
             <version>${scala.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.codenjoy</groupId>
+            <artifactId>engine</artifactId>
+            <version>1.0.28</version>
+        </dependency>
     </dependencies>
 
     <build>
