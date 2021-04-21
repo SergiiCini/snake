@@ -10,7 +10,7 @@ public class Cell {
     // Heuristic cost of the current cell
     public int heuristicCost;
     //final cost
-    public int finalCost; // G+H
+    public int finalCost; // G+H - actually it's how much energy we'll need to get to the goal
     // G(n) - the cost of the path from the start node to n
     // H(n) - the heuristic that estimates the cost of the cheapest path from n to the goal
     public boolean solution; //if cell is a part of the solution path;
@@ -19,7 +19,6 @@ public class Cell {
         this.x = x;
         this.y = y;
     }
-
 
     @Override
     public String toString() {

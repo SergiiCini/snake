@@ -13,7 +13,7 @@ public class AStar {
     //open Cells: the set of nodes to be evaluated
     //we put the node with the lowest cost in first
     private PriorityQueue<Cell> openCells;
-    //closed Cells: the set of nodes already has evaluated
+    //closed Cells: the set of nodes already were evaluated
     private boolean[][] closedCells;
     //start cell:
     private int startX, startY;
@@ -25,23 +25,34 @@ public class AStar {
     public AStar(int width, int height, int sX, int sY, int eX, int eY, int[][] obstacles) {
         grid = new Cell[width][height];
         closedCells = new boolean[width][height];
-        openCells = new PriorityQueue<Cell>((Cell c1, Cell c2) -> {
+        openCells = new PriorityQueue<>((Cell c1, Cell c2) -> {
             return c1.finalCost < c2.finalCost ? -1 : c1.finalCost > c2.finalCost ? 1 : 0;
         });
         startCell(sX, sY);
         endCell(eX, eY);
 
         //init heuristic and cells
+        initHeuristicCells();
+
+        grid[startX][startY].finalCost = 0;
+
+        //we put the obstacles on the grid
+        addObstaclesToTheGrid(obstacles);
+
+    }
+
+    public void initHeuristicCells() {
         for (int i = 0; i < grid.length; i++) {
             for (int j = 0; j < grid[i].length; j++) {
                 grid[i][j] = new Cell(i, j);
+                //a heuristic cost would be the straight line distance to the point.
                 grid[i][j].heuristicCost = Math.abs(i - endX) + Math.abs(j - endY);
                 grid[i][j].solution = false;
             }
         }
-        grid[startX][startY].finalCost = 0;
+    }
 
-        //we put the obstacles on the grid
+    public void addObstaclesToTheGrid(int[][] obstacles){
         for (int i = 0; i < obstacles.length; i++) {
             addObstaclesOnCell(obstacles[i][0], obstacles[i][1]);
         }
@@ -69,7 +80,6 @@ public class AStar {
         if (!isOpen || tFinalCost < t.finalCost) {
             t.finalCost = tFinalCost;
             t.parent = current;
-
             if (!isOpen) openCells.add(t);
         }
     }
@@ -77,9 +87,13 @@ public class AStar {
     public void process() {
         //we add the start location to open list
         openCells.add(grid[startX][startY]);
+
+        // in current we'll store all our neighbours cells
         Cell current;
 
         while (true) {
+
+            // we get and remove first cell from head
             current = openCells.poll();
 
             if (current == null)
@@ -90,6 +104,7 @@ public class AStar {
 
             Cell t;
 
+            // here we count finalCost for our grid
             if (current.x - 1 >= 0) {
                 t = grid[current.x - 1][current.y];
                 updateCostIfNeeded(current, t, current.finalCost + V_H_COST);
@@ -112,6 +127,8 @@ public class AStar {
         }
     }
 
+
+    // display board info
     public void display() {
         System.out.println("Grid: ");
 
